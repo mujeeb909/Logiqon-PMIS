@@ -7,7 +7,10 @@
 <footer class="dash-footer">
     <div class="footer-wrapper">
         <div class="py-1">
-            <span class="text-muted">  <?php echo e((Utility::getValByName('footer_text')) ? Utility::getValByName('footer_text') :  __('Copyright ERPGO')); ?> <?php echo e(date('Y')); ?></span>
+            <span class="text-muted">
+                <?php echo e(Utility::getValByName('footer_text') ? Utility::getValByName('footer_text') : __('Copyright PMIS')); ?>
+
+                <?php echo e(date('Y')); ?></span>
         </div>
     </div>
 </footer>
@@ -64,11 +67,10 @@
 <?php echo $__env->yieldPushContent('old-datatable-js'); ?>
 
 <script>
-
     feather.replace();
     var pctoggle = document.querySelector("#pct-toggler");
     if (pctoggle) {
-        pctoggle.addEventListener("click", function () {
+        pctoggle.addEventListener("click", function() {
             if (
                 !document.querySelector(".pct-customizer").classList.contains("active")
             ) {
@@ -83,7 +85,7 @@
     for (var h = 0; h < themescolors.length; h++) {
         var c = themescolors[h];
 
-        c.addEventListener("click", function (event) {
+        c.addEventListener("click", function(event) {
             var targetElement = event.target;
             if (targetElement.tagName == "SPAN") {
                 targetElement = targetElement.parentNode;

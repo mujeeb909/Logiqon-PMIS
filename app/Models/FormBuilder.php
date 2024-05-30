@@ -19,6 +19,14 @@ class FormBuilder extends Model
         'number' => 'Number',
         'date' => 'Date',
         'textarea' => 'Textarea',
+        'radio' => 'Radio',
+    ];
+
+    public static $option = [
+        'male' => 'Male',
+        'female' => 'Female',
+        'other' => 'Other',
+
     ];
 
     public function form_field()

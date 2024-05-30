@@ -7,7 +7,9 @@
 <footer class="dash-footer">
     <div class="footer-wrapper">
         <div class="py-1">
-            <span class="text-muted">  {{(Utility::getValByName('footer_text')) ? Utility::getValByName('footer_text') :  __('Copyright ERPGO') }} {{ date('Y') }}</span>
+            <span class="text-muted">
+                {{ Utility::getValByName('footer_text') ? Utility::getValByName('footer_text') : __('Copyright PMIS') }}
+                {{ date('Y') }}</span>
         </div>
     </div>
 </footer>
@@ -38,7 +40,7 @@
 <script src="{{ asset('js/jscolor.js') }}"></script>
 
 <script src="{{ asset('js/popper.min.js') }}"></script>
-{{--<script src="{{ asset ('js/bootstrap.min.js') }}"></script>--}}
+{{-- <script src="{{ asset ('js/bootstrap.min.js') }}"></script> --}}
 
 <script>
     var site_currency_symbol_position = '{{ \App\Models\Utility::getValByName('site_currency_symbol_position') }}';
@@ -46,17 +48,17 @@
 </script>
 <script src="{{ asset('js/custom.js') }}"></script>
 
-@if($message = Session::get('success'))
+@if ($message = Session::get('success'))
     <script>
         show_toastr('success', '{!! $message !!}');
     </script>
 @endif
-@if($message = Session::get('error'))
+@if ($message = Session::get('error'))
     <script>
         show_toastr('error', '{!! $message !!}');
     </script>
 @endif
-@if($get_cookie['enable_cookie'] == 'on')
+@if ($get_cookie['enable_cookie'] == 'on')
     @include('layouts.cookie_consent')
 @endif
 @stack('script-page')
@@ -64,11 +66,10 @@
 @stack('old-datatable-js')
 
 <script>
-
     feather.replace();
     var pctoggle = document.querySelector("#pct-toggler");
     if (pctoggle) {
-        pctoggle.addEventListener("click", function () {
+        pctoggle.addEventListener("click", function() {
             if (
                 !document.querySelector(".pct-customizer").classList.contains("active")
             ) {
@@ -83,7 +84,7 @@
     for (var h = 0; h < themescolors.length; h++) {
         var c = themescolors[h];
 
-        c.addEventListener("click", function (event) {
+        c.addEventListener("click", function(event) {
             var targetElement = event.target;
             if (targetElement.tagName == "SPAN") {
                 targetElement = targetElement.parentNode;
