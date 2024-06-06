@@ -11,58 +11,63 @@
 <?php $__env->startSection('action-btn'); ?>
     <div class="float-end">
         <?php if($view == 'grid'): ?>
-            <a href="<?php echo e(route('projects.list','list')); ?>"  data-bs-toggle="tooltip" title="<?php echo e(__('List View')); ?>" class="btn btn-sm btn-primary">
+            <a href="<?php echo e(route('projects.list', 'list')); ?>" data-bs-toggle="tooltip" title="<?php echo e(__('List View')); ?>"
+                class="btn btn-sm btn-primary">
                 <i class="ti ti-list"></i>
             </a>
-
         <?php else: ?>
-            <a href="<?php echo e(route('projects.index')); ?>"  data-bs-toggle="tooltip" title="<?php echo e(__('Grid View')); ?>" class="btn btn-sm btn-primary">
+            <a href="<?php echo e(route('projects.index')); ?>" data-bs-toggle="tooltip" title="<?php echo e(__('Grid View')); ?>"
+                class="btn btn-sm btn-primary">
                 <i class="ti ti-layout-grid"></i>
             </a>
         <?php endif; ?>
 
 
         
-                <a href="#" class="btn btn-sm btn-primary action-item" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="ti ti-filter"></i>
-                </a>
-                <div class="dropdown-menu  dropdown-steady" id="project_sort">
-                    <a class="dropdown-item active" href="#" data-val="created_at-desc">
-                        <i class="ti ti-sort-descending"></i><?php echo e(__('Newest')); ?>
+        <a href="#" class="btn btn-sm btn-primary action-item" role="button" data-bs-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <i class="ti ti-filter"></i>
+        </a>
+        <div class="dropdown-menu  dropdown-steady" id="project_sort">
+            <a class="dropdown-item active" href="#" data-val="created_at-desc">
+                <i class="ti ti-sort-descending"></i><?php echo e(__('Newest')); ?>
 
-                    </a>
-                    <a class="dropdown-item" href="#" data-val="created_at-asc">
-                        <i class="ti ti-sort-ascending"></i><?php echo e(__('Oldest')); ?>
+            </a>
+            <a class="dropdown-item" href="#" data-val="created_at-asc">
+                <i class="ti ti-sort-ascending"></i><?php echo e(__('Oldest')); ?>
 
-                    </a>
+            </a>
 
-                    <a class="dropdown-item" href="#" data-val="project_name-desc">
-                        <i class="ti ti-sort-descending-letters"></i><?php echo e(__('From Z-A')); ?>
+            <a class="dropdown-item" href="#" data-val="project_name-desc">
+                <i class="ti ti-sort-descending-letters"></i><?php echo e(__('From Z-A')); ?>
 
-                    </a>
-                    <a class="dropdown-item" href="#" data-val="project_name-asc">
-                        <i class="ti ti-sort-ascending-letters"></i><?php echo e(__('From A-Z')); ?>
+            </a>
+            <a class="dropdown-item" href="#" data-val="project_name-asc">
+                <i class="ti ti-sort-ascending-letters"></i><?php echo e(__('From A-Z')); ?>
 
-                    </a>
-                </div>
+            </a>
+        </div>
 
-            
+        
 
-            
-                <a href="#" class="btn btn-sm btn-primary action-item" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="btn-inner--icon"><?php echo e(__('Status')); ?></span>
-                </a>
-                <div class="dropdown-menu  project-filter-actions dropdown-steady" id="project_status">
-                    <a class="dropdown-item filter-action filter-show-all pl-4 active" href="#"><?php echo e(__('Show All')); ?></a>
-                    <?php $__currentLoopData = \App\Models\Project::$project_status; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $val): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <a class="dropdown-item filter-action pl-4" href="#" data-val="<?php echo e($key); ?>"><?php echo e(__($val)); ?></a>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                </div>
-            
+        
+        <a href="#" class="btn btn-sm btn-primary action-item" role="button" data-bs-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <span class="btn-inner--icon"><?php echo e(__('Status')); ?></span>
+        </a>
+        <div class="dropdown-menu  project-filter-actions dropdown-steady" id="project_status">
+            <a class="dropdown-item filter-action filter-show-all pl-4 active" href="#"><?php echo e(__('Show All')); ?></a>
+            <?php $__currentLoopData = \App\Models\Project::$project_status; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $val): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <a class="dropdown-item filter-action pl-4" href="#"
+                    data-val="<?php echo e($key); ?>"><?php echo e(__($val)); ?></a>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </div>
+        
 
 
         <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('create project')): ?>
-            <a href="#" data-size="lg" data-url="<?php echo e(route('projects.create')); ?>" data-ajax-popup="true" data-bs-toggle="tooltip" title="<?php echo e(__('Create New Project')); ?>" class="btn btn-sm btn-primary">
+            <a href="#" data-size="lg" data-url="<?php echo e(route('projects.create')); ?>" data-ajax-popup="true"
+                data-bs-toggle="tooltip" title="<?php echo e(__('Create New Project')); ?>" class="btn btn-sm btn-primary">
                 <i class="ti ti-plus"></i>
             </a>
         <?php endif; ?>
@@ -75,11 +80,11 @@
 
 <?php $__env->startPush('script-page'); ?>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             var sort = 'created_at-desc';
             var status = '';
             ajaxFilterProjectView('created_at-desc');
-            $(".project-filter-actions").on('click', '.filter-action', function (e) {
+            $(".project-filter-actions").on('click', '.filter-action', function(e) {
                 if ($(this).hasClass('filter-show-all')) {
                     $('.filter-action').removeClass('active');
                     $(this).addClass('active');
@@ -95,7 +100,7 @@
 
                 var filterArray = [];
                 var url = $(this).parents('.project-filter-actions').attr('data-url');
-                $('div.project-filter-actions').find('.active').each(function () {
+                $('div.project-filter-actions').find('.active').each(function() {
                     filterArray.push($(this).attr('data-val'));
                 });
 
@@ -105,7 +110,7 @@
             });
 
             // when change sorting order
-            $('#project_sort').on('click', 'a', function () {
+            $('#project_sort').on('click', 'a', function() {
                 sort = $(this).attr('data-val');
                 ajaxFilterProjectView(sort, $('#project_keyword').val(), status);
                 $('#project_sort a').removeClass('active');
@@ -113,12 +118,12 @@
             });
 
             // when searching by project name
-            $(document).on('keyup', '#project_keyword', function () {
+            $(document).on('keyup', '#project_keyword', function() {
                 ajaxFilterProjectView(sort, $(this).val(), status);
             });
 
 
-            $(document).on('click', '.invite_usr', function () {
+            $(document).on('click', '.invite_usr', function() {
                 var project_id = $('#project_id').val();
                 var user_id = $(this).attr('data-id');
 
@@ -131,7 +136,7 @@
                         'user_id': user_id,
                         "_token": "<?php echo e(csrf_token()); ?>"
                     },
-                    success: function (data) {
+                    success: function(data) {
                         if (data.code == '200') {
                             show_toastr(data.status, data.success, 'success')
                             setInterval('location.reload()', 5000);
@@ -158,12 +163,12 @@
             currentRequest = $.ajax({
                 url: '<?php echo e(route('filter.project.view')); ?>',
                 data: data,
-                beforeSend: function () {
+                beforeSend: function() {
                     if (currentRequest != null) {
                         currentRequest.abort();
                     }
                 },
-                success: function (data) {
+                success: function(data) {
                     mainEle.html(data.html);
                     $('[id^=fire-modal]').remove();
                     loadConfirm();

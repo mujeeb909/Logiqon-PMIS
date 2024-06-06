@@ -1041,7 +1041,10 @@ Route::group(['middleware' => ['verified']], function () {
 
 
     Route::resource('projects', ProjectController::class)->middleware(['auth', 'XSS']);
+    Route::get('/projects/{project}/edit-status', [ProjectController::class, 'editStatus'])->name('edit.status');
+    Route::put('/projects/{project}/edit-status', [ProjectController::class, 'updateStatus'])->name('projects.updateStatus');
 
+    Route::delete('delete-project', [ProjectController::class, 'deleteProject'])->name('delete.project');
     // User Permission
     Route::get('projects/{id}/user/{uid}/permission', [ProjectController::class, 'userPermission'])->name('projects.user.permission')->middleware(['auth', 'XSS']);
     Route::post('projects/{id}/user/{uid}/permission', [ProjectController::class, 'userPermissionStore'])->name('projects.user.permission.store')->middleware(['auth', 'XSS']);

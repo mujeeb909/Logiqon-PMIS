@@ -4,8 +4,8 @@
 <?php $__env->stopSection(); ?>
 <?php $__env->startPush('script-page'); ?>
     <script>
-        $(document).ready(function () {
-            $('.cp_link').on('click', function () {
+        $(document).ready(function() {
+            $('.cp_link').on('click', function() {
                 var value = $(this).attr('data-link');
                 var $temp = $("<input>");
                 $("body").append($temp);
@@ -16,8 +16,8 @@
             });
         });
 
-        $(document).ready(function () {
-            $('.iframe_link').on('click', function () {
+        $(document).ready(function() {
+            $('.iframe_link').on('click', function() {
                 var value = $(this).attr('data-link');
                 var $temp = $("<input>");
                 $("body").append($temp);
@@ -35,7 +35,8 @@
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('action-btn'); ?>
     <div class="float-end">
-        <a href="#" data-size="md" data-url="<?php echo e(route('form_builder.create')); ?>" data-ajax-popup="true" data-bs-toggle="tooltip" title="<?php echo e(__('Create New Form')); ?>" class="btn btn-sm btn-primary">
+        <a href="#" data-size="md" data-url="<?php echo e(route('form_builder.create')); ?>" data-ajax-popup="true"
+            data-bs-toggle="tooltip" title="<?php echo e(__('Create New Form')); ?>" class="btn btn-sm btn-primary">
             <i class="ti ti-plus"></i>
         </a>
     </div>
@@ -49,72 +50,102 @@
                     <div class="table-responsive">
                         <table class="table datatable">
                             <thead>
-                            <tr>
-                                <th><?php echo e(__('Name')); ?></th>
-                                <th><?php echo e(__('Response')); ?></th>
-                                <?php if(\Auth::user()->type=='company'): ?>
-                                    <th class="text-end" width="200px"><?php echo e(__('Action')); ?></th>
-                                <?php endif; ?>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php $__currentLoopData = $forms; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $form): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
-                                    <td><?php echo e($form->name); ?></td>
-                                    <td>
-                                        <?php echo e($form->response->count()); ?>
-
-                                    </td>
-                                    <?php if(\Auth::user()->type=='company'): ?>
-                                        <td class="text-end">
-
-
-                                            <div class="action-btn bg-primary ms-2">
-                                                <a href="#" class="mx-3 btn btn-sm d-inline-flex align-items-center cp_link" data-link="<iframe src='<?php echo e(url('/form/'.$form->code)); ?>' title='<?php echo e($form->name); ?>'></iframe>" data-bs-toggle="tooltip" title="<?php echo e(__('Click to copy iframe link')); ?>"><i class="ti ti-frame text-white"></i></a>
-                                            </div>
-
-                                            <div class="action-btn bg-secondary ms-2">
-                                                <a href="#" class="mx-3 btn btn-sm d-inline-flex align-items-center" data-url="<?php echo e(route('form.field.bind',$form->id)); ?>" data-ajax-popup="true" data-size="md" data-bs-toggle="tooltip" title="<?php echo e(__('Convert into Lead Setting')); ?>" data-title="<?php echo e(__('Convert into Lead Setting')); ?>">
-                                                    <i class="ti ti-exchange text-white"></i>
-                                                </a>
-                                            </div>
-
-
-                                            <div class="action-btn bg-primary ms-2">
-                                                <a href="#" class="mx-3 btn btn-sm d-inline-flex align-items-center cp_link" data-link="<?php echo e(url('/form/'.$form->code)); ?>" data-bs-toggle="tooltip" title="<?php echo e(__('Click to copy link')); ?>"><i class="ti ti-copy text-white"></i></a>
-                                            </div>
-
-                                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('manage form field')): ?>
-                                                <div class="action-btn bg-secondary ms-2">
-                                                    <a href="<?php echo e(route('form_builder.show',$form->id)); ?>" class="mx-3 btn btn-sm d-inline-flex align-items-center" data-bs-toggle="tooltip" title="<?php echo e(__('Form field')); ?>"><i class="ti ti-table text-white"></i></a>
-                                                </div>
-                                            <?php endif; ?>
-
-                                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('view form response')): ?>
-                                                <div class="action-btn bg-warning ms-2">
-                                                    <a href="<?php echo e(route('form.response',$form->id)); ?>" class="mx-3 btn btn-sm d-inline-flex align-items-center" data-bs-toggle="tooltip" title="<?php echo e(__('View Response')); ?>"><i class="ti ti-eye text-white"></i></a>
-                                                </div>
-                                            <?php endif; ?>
-                                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('edit form builder')): ?>
-                                                <div class="action-btn bg-info ms-2">
-                                                    <a href="#" class="mx-3 btn btn-sm d-inline-flex align-items-center" data-url="<?php echo e(route('form_builder.edit',$form->id)); ?>" data-ajax-popup="true" data-size="md" data-bs-toggle="tooltip" title="<?php echo e(__('Edit')); ?>" data-title="<?php echo e(__('Form Builder Edit')); ?>">
-                                                        <i class="ti ti-pencil text-white"></i>
-                                                    </a>
-                                                </div>
-                                            <?php endif; ?>
-                                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('delete form builder')): ?>
-                                                <div class="action-btn bg-danger ms-2">
-                                                    <?php echo Form::open(['method' => 'DELETE', 'route' => ['form_builder.destroy', $form->id],'id'=>'delete-form-'.$form->id]); ?>
-
-                                                    <a href="#" class="mx-3 btn btn-sm  align-items-center bs-pass-para" data-bs-toggle="tooltip" title="<?php echo e(__('Delete')); ?>"><i class="ti ti-trash text-white"></i></a>
-                                                    <?php echo Form::close(); ?>
-
-                                                </div>
-                                            <?php endif; ?>
-                                        </td>
+                                    <th><?php echo e(__('Name')); ?></th>
+                                    <th><?php echo e(__('Response')); ?></th>
+                                    <th><?php echo e(__('Project')); ?></th>
+                                    <?php if(\Auth::user()->type == 'company'): ?>
+                                        <th class="text-end" width="200px"><?php echo e(__('Action')); ?></th>
                                     <?php endif; ?>
                                 </tr>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </thead>
+                            <tbody>
+                                <?php $__currentLoopData = $forms; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $form): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <tr>
+                                        <td><?php echo e($form->name); ?></td>
+                                        <td>
+                                            <?php echo e($form->response->count()); ?>
+
+                                        </td>
+                                        <td><?php echo e($form->project ? $form->project->project_name : 'N/A'); ?></td>
+                                        <?php if(
+                                            \Auth::user()->type == 'company' ||
+                                                \Auth::user()->type == 'Director' ||
+                                                \Auth::user()->type == 'Project Managers' ||
+                                                \Auth::user()->type == 'Provisional Supervisor' ||
+                                                \Auth::user()->type == 'Social Mobilizer'): ?>
+                                            <td class="text-end">
+
+
+                                                <div class="action-btn bg-primary ms-2">
+                                                    <a href="#"
+                                                        class="mx-3 btn btn-sm d-inline-flex align-items-center cp_link"
+                                                        data-link="<iframe src='<?php echo e(url('/form/' . $form->code)); ?>' title='<?php echo e($form->name); ?>'></iframe>"
+                                                        data-bs-toggle="tooltip"
+                                                        title="<?php echo e(__('Click to copy iframe link')); ?>"><i
+                                                            class="ti ti-frame text-white"></i></a>
+                                                </div>
+
+                                                
+
+
+                                                <div class="action-btn bg-primary ms-2">
+                                                    <a href="#"
+                                                        class="mx-3 btn btn-sm d-inline-flex align-items-center cp_link"
+                                                        data-link="<?php echo e(url('/form/' . $form->code)); ?>"
+                                                        data-bs-toggle="tooltip" title="<?php echo e(__('Click to copy link')); ?>"><i
+                                                            class="ti ti-copy text-white"></i></a>
+                                                </div>
+
+                                                
+                                                <div class="action-btn bg-secondary ms-2">
+                                                    <a href="<?php echo e(route('form_builder.show', $form->id)); ?>"
+                                                        class="mx-3 btn btn-sm d-inline-flex align-items-center"
+                                                        data-bs-toggle="tooltip" title="<?php echo e(__('Form field')); ?>"><i
+                                                            class="ti ti-table text-white"></i></a>
+                                                </div>
+                                                
+
+                                                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('view form response')): ?>
+                                                    <div class="action-btn bg-warning ms-2">
+                                                        <a href="<?php echo e(route('form.response', $form->id)); ?>"
+                                                            class="mx-3 btn btn-sm d-inline-flex align-items-center"
+                                                            data-bs-toggle="tooltip" title="<?php echo e(__('View Response')); ?>"><i
+                                                                class="ti ti-eye text-white"></i></a>
+                                                    </div>
+                                                <?php endif; ?>
+                                                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('edit form builder')): ?>
+                                                    <div class="action-btn bg-info ms-2">
+                                                        <a href="#"
+                                                            class="mx-3 btn btn-sm d-inline-flex align-items-center"
+                                                            data-url="<?php echo e(route('form_builder.edit', $form->id)); ?>"
+                                                            data-ajax-popup="true" data-size="md" data-bs-toggle="tooltip"
+                                                            title="<?php echo e(__('Edit')); ?>"
+                                                            data-title="<?php echo e(__('Form Builder Edit')); ?>">
+                                                            <i class="ti ti-pencil text-white"></i>
+                                                        </a>
+                                                    </div>
+                                                <?php endif; ?>
+                                                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('delete form builder')): ?>
+                                                    <div class="action-btn bg-danger ms-2">
+                                                        <?php echo Form::open([
+                                                            'method' => 'DELETE',
+                                                            'route' => ['form_builder.destroy', $form->id],
+                                                            'id' => 'delete-form-' . $form->id,
+                                                        ]); ?>
+
+                                                        <a href="#"
+                                                            class="mx-3 btn btn-sm  align-items-center bs-pass-para"
+                                                            data-bs-toggle="tooltip" title="<?php echo e(__('Delete')); ?>"><i
+                                                                class="ti ti-trash text-white"></i></a>
+                                                        <?php echo Form::close(); ?>
+
+                                                    </div>
+                                                <?php endif; ?>
+                                            </td>
+                                        <?php endif; ?>
+                                    </tr>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                             </tbody>
                         </table>

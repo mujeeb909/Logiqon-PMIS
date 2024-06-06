@@ -20,8 +20,11 @@ class FormBuilderController extends Controller
     {
         $usr = \Auth::user();
         if ($usr->can('manage form builder')) {
-            $forms = FormBuilder::where('created_by', '=', $usr->creatorId())->get();
-
+            // $forms = FormBuilder::where('created_by', '=', $usr->creatorId())->get();
+            // $projectId = FormBuilder::where('project_id')->get();
+            $forms = FormBuilder::with('project')
+                ->where('created_by', $usr->creatorId())
+                ->get();
             return view('form_builder.index', compact('forms'));
         } else {
             return redirect()->back()->with('error', __('Permission denied.'));
@@ -66,12 +69,12 @@ class FormBuilderController extends Controller
 
     public function show(FormBuilder $formBuilder)
     {
-        if (\Auth::user()->can('manage form field')) {
-            if ($formBuilder->created_by == \Auth::user()->creatorId()) {
-                return view('form_builder.show', compact('formBuilder'));
-            } else {
-                return response()->json(['error' => __('Permission Denied.')], 401);
-            }
+        if (\Auth::user()->type == 'company' || \Auth::user()->type == 'Director' || \Auth::user()->type == 'Project Managers' || \Auth::user()->type == 'Provisional Supervisor' || \Auth::user()->type == 'Social Mobilizer') {
+            // if ($formBuilder->created_by == \Auth::user()->creatorId()) {
+            return view('form_builder.show', compact('formBuilder'));
+            // } else {
+            //     return response()->json(['error' => __('Permission Denied.')], 401);
+            // }
         } else {
             return redirect()->back()->with('error', __('Permission denied.'));
         }
@@ -147,50 +150,50 @@ class FormBuilderController extends Controller
     public function fieldCreate($id)
     {
         $usr = \Auth::user();
-        if ($usr->can('create form field')) {
-            $formbuilder = FormBuilder::find($id);
-            if ($formbuilder->created_by == $usr->creatorId()) {
-                $types = FormBuilder::$fieldTypes;
+        // if ($usr->can('create form field')) {
+        $formbuilder = FormBuilder::find($id);
+        if ($formbuilder->created_by == $usr->creatorId()) {
+            $types = FormBuilder::$fieldTypes;
 
-                return view('form_builder.field_create', compact('types', 'formbuilder'));
-            } else {
-                return redirect()->back()->with('error', __('Permission Denied.'));
-            }
+            return view('form_builder.field_create', compact('types', 'formbuilder'));
         } else {
-            return redirect()->back()->with('error', __('Permission denied.'));
+            return redirect()->back()->with('error', __('Permission Denied.'));
         }
+        // } else {
+        //     return redirect()->back()->with('error', __('Permission denied.'));
+        // }
     }
 
     public function fieldStore($id, Request $request)
     {
         $usr = \Auth::user();
-        if ($usr->can('create form field')) {
-            $formbuilder = FormBuilder::find($id);
-            if ($formbuilder->created_by == $usr->creatorId()) {
-                $names = $request->name;
-                $types = $request->type;
+        // if ($usr->can('create form field')) {
+        $formbuilder = FormBuilder::find($id);
+        if ($formbuilder->created_by == $usr->creatorId()) {
+            $names = $request->name;
+            $types = $request->type;
 
-                foreach ($names as $key => $value) {
-                    if (!empty($value)) {
-                        // create form field
-                        FormField::create(
-                            [
-                                'form_id' => $formbuilder->id,
-                                'name' => $value,
-                                'type' => $types[$key],
-                                'created_by' => $usr->creatorId(),
-                            ]
-                        );
-                    }
+            foreach ($names as $key => $value) {
+                if (!empty($value)) {
+                    // create form field
+                    FormField::create(
+                        [
+                            'form_id' => $formbuilder->id,
+                            'name' => $value,
+                            'type' => $types[$key],
+                            'created_by' => $usr->creatorId(),
+                        ]
+                    );
                 }
-
-                return redirect()->back()->with('success', __('Field successfully created.'));
-            } else {
-                return redirect()->back()->with('error', __('Permission Denied.'));
             }
+
+            return redirect()->back()->with('success', __('Field successfully created.'));
         } else {
-            return redirect()->back()->with('error', __('Permission denied.'));
+            return redirect()->back()->with('error', __('Permission Denied.'));
         }
+        // } else {
+        //     return redirect()->back()->with('error', __('Permission denied.'));
+        // }
     }
 
     public function fieldEdit($id, $field_id)

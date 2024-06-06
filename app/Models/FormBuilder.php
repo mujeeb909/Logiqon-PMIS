@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Project;
 use Illuminate\Database\Eloquent\Model;
 
 class FormBuilder extends Model
@@ -10,6 +11,7 @@ class FormBuilder extends Model
         'form_id',
         'name',
         'type',
+        'project_id',
         'created_by',
     ];
 
@@ -28,6 +30,11 @@ class FormBuilder extends Model
         'other' => 'Other',
 
     ];
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class, 'project_id');
+    }
 
     public function form_field()
     {

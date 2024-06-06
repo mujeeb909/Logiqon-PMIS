@@ -16,10 +16,10 @@
                     <a class="nav-link active" id="pills-staff-tab" data-bs-toggle="pill" href="#staff" role="tab"
                         aria-controls="pills-home" aria-selected="true">{{ __('Staff') }}</a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link" id="pills-crm-tab" data-bs-toggle="pill" href="#crm" role="tab"
                         aria-controls="pills-profile" aria-selected="false">{{ __('CRM') }}</a>
-                </li>
+                </li> --}}
                 <li class="nav-item">
                     <a class="nav-link" id="pills-project-tab" data-bs-toggle="pill" href="#project" role="tab"
                         aria-controls="pills-contact" aria-selected="false">{{ __('Project') }}</a>
@@ -41,17 +41,17 @@
                         $modules = [
                             'user',
                             'role',
-                            'client',
-                            'product & service',
-                            'constant unit',
-                            'constant tax',
-                            'constant category',
-                            'company settings',
+                            // 'client',
+                            // 'product & service',
+                            // 'constant unit',
+                            // 'constant tax',
+                            // 'constant category',
+                            // 'company settings',
                         ];
-                        if (\Auth::user()->type == 'company') {
-                            $modules[] = 'language';
-                            $modules[] = 'permission';
-                        }
+                        // if (\Auth::user()->type == 'company') {
+                        //     $modules[] = 'language';
+                        //     $modules[] = 'permission';
+                        // }
                     @endphp
                     <div class="col-md-12">
                         <div class="form-group">
@@ -523,7 +523,9 @@
                             'grant chart',
                             'project stage',
                             'timesheet',
-                            'expense',
+                            // 'expense',
+                            'form builder',
+                            'form response',
                             'project task',
                             'activity',
                             'CRM activity',
