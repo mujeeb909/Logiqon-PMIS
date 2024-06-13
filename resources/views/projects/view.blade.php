@@ -249,13 +249,13 @@
                                 </div>
                                 <div class="ms-3">
                                     <small class="text-muted h6">{{ __('Total Survey') }}</small>
-                                    <h6 class="m-0">{{ $project_data['task']['total'] }}</h6>
+                                    {{-- <h6 class="m-0">{{ $surveys->count() }}</h6> --}}
                                 </div>
                             </div>
                         </div>
                         <div class="col-auto text-end">
-                            <h4 class="m-0">{{ $project_data['task']['done'] }}</h4>
-                            <small class="text-muted h6">{{ __('Done Task') }}</small>
+                            <h4 class="m-0">{{ $surveys->count() }}</h4>
+                            {{-- <small class="text-muted h6">{{ __('Done Task') }}</small> --}}
                         </div>
                     </div>
                 </div>
@@ -277,7 +277,7 @@
                             </div>
                         </div>
                         <div class="col-auto text-end">
-                            <h4 class="m-0">{{ $project_data['task']['total'] }}</h4>
+                            <h4 class="m-0">{{ $survey_count }}</h4>
                         </div>
                     </div>
                 </div>
@@ -372,13 +372,19 @@
                 <div class="card-header">
                     @can('create milestone')
                         <div class="d-flex align-items-center justify-content-between">
-                            <h5>{{ __('Recent Survey') }} ({{ count($project->milestones) }})</h5>
+                            <h5>{{ __('Recent Survey') }} ({{ $surveys->count() }})</h5>
 
                             <div class="float-end">
-                                <a href="#" data-size="md" data-url="{{ route('project.milestone', $project->id) }}"
+
+                                <a href="{{ route('pro.survey.show', $project->id) }}" class="btn btn-sm btn-primary">
+                                    View All
+
+                                </a>
+                                <a href="#" data-size="md" data-url="{{ route('createSurvey', $project->id) }}"
                                     data-ajax-popup="true" data-bs-toggle="tooltip" title=""
-                                    class="btn btn-sm btn-primary" data-bs-original-title="{{ __('Create New Milestone') }}">
+                                    class="btn btn-sm btn-primary" data-bs-original-title="{{ __('Create New Survey') }}">
                                     <i class="ti ti-plus"></i>
+
                                 </a>
                             </div>
                         </div>
@@ -387,47 +393,41 @@
                 </div>
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
-                        @if ($project->milestones->count() > 0)
-                            @foreach ($project->milestones as $milestone)
+                        @if ($surveys->count() > 0)
+                            @foreach ($surveys as $survey)
                                 <li class="list-group-item px-0">
                                     <div class="row align-items-center justify-content-between">
                                         <div class="col-sm-auto mb-3 mb-sm-0">
                                             <div class="d-flex align-items-center">
                                                 <div class="div">
-                                                    <h6 class="m-0">{{ $milestone->title }}
-                                                        <span
-                                                            class="badge-xs badge bg-{{ \App\Models\Project::$status_color[$milestone->status] }} p-2 px-3 rounded">{{ __(\App\Models\Project::$project_status[$milestone->status]) }}</span>
+
+                                                    <h6 class="m-0">{{ $survey->name }}
+
                                                     </h6>
-                                                    <small
-                                                        class="text-muted">{{ $milestone->tasks->count() . ' ' . __('Tasks') }}</small>
 
+
+                                                    {{-- <small
+                                                        class="text-muted">{{ __('Survey ID: ') . $survey->id }}</small> --}}
                                                 </div>
-
                                             </div>
                                         </div>
                                         <div class="col-sm-auto text-sm-end d-flex align-items-center">
-                                            <div class="action-btn bg-warning ms-2">
+
+                                            {{-- <div class="action-btn bg-info ms-2">
+                                        
                                                 <a href="#" data-size="md"
-                                                    data-url="{{ route('project.milestone.show', $milestone->id) }}"
-                                                    data-ajax-popup="true" data-bs-toggle="tooltip"
-                                                    title="{{ __('View') }}" class="btn btn-sm">
-                                                    <i class="ti ti-eye text-white"></i>
-                                                </a>
-                                            </div>
-                                            <div class="action-btn bg-info ms-2">
-                                                <a href="#" data-size="md"
-                                                    data-url="{{ route('project.milestone.edit', $milestone->id) }}"
-                                                    data-ajax-popup="true" data-bs-toggle="tooltip"
-                                                    title="{{ __('Edit') }}" class="btn btn-sm">
+                                                    data-url="{{ route('survey.edit', $survey->id) }}"
+                                                    data-bs-toggle="tooltip" title="" class="btn btn-sm btn-info"
+                                                    data-bs-original-title="{{ __('Edit') }}">
                                                     <i class="ti ti-pencil text-white"></i>
                                                 </a>
-                                            </div>
+
+                                            </div> --}}
                                             <div class="action-btn bg-danger ms-2">
-                                                {!! Form::open(['method' => 'DELETE', 'route' => ['project.milestone.destroy', $milestone->id]]) !!}
-                                                <a href="#" class="mx-3 btn btn-sm  align-items-center bs-pass-para"
+                                                {!! Form::open(['method' => 'DELETE', 'route' => ['survey.delete', $survey->id]]) !!}
+                                                <a href="#" class="mx-3 btn btn-sm align-items-center bs-pass-para"
                                                     data-bs-toggle="tooltip" title="{{ __('Delete') }}"><i
                                                         class="ti ti-trash text-white"></i></a>
-
                                                 {!! Form::close() !!}
                                             </div>
                                         </div>
@@ -439,6 +439,9 @@
                                 <h6 class="h6 text-center">{{ __('No Survey Found.') }}</h6>
                             </div>
                         @endif
+
+
+
                     </ul>
 
                 </div>

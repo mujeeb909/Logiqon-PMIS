@@ -1199,6 +1199,14 @@ Route::group(['middleware' => ['verified']], function () {
 
     // Form Builder
     Route::resource('form_builder', FormBuilderController::class)->middleware(['auth', 'XSS']);
+    Route::get('/create-survey/{project}', [FormBuilderController::class, 'createSurvey'])->name('createSurvey')->middleware(['XSS']);
+    Route::post('/save-survey', [FormBuilderController::class, 'storeSurvey'])->name('storeSurvey');
+
+    Route::get('/survey-edit/{formBuilder}', [FormBuilderController::class, 'editSurvey'])->name('survey.edit');
+    Route::get('/survey-update', [FormBuilderController::class, 'updateSurvey'])->name('survey.update');
+    Route::get('/project-survey/{id}', [FormBuilderController::class, 'indexSurvey'])->name('pro.survey.show');
+
+    Route::delete('/delete-survey{formBuilder}', [FormBuilderController::class, 'destroySurvey'])->name('survey.delete');
 
 
     // Form link base view

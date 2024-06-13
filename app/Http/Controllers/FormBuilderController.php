@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FormBuilder;
-use App\Models\FormField;
-use App\Models\FormFieldResponse;
-use App\Models\FormResponse;
 use App\Models\Lead;
-use App\Models\LeadStage;
-use App\Models\Pipeline;
 use App\Models\User;
+use App\Models\Project;
+use App\Models\Pipeline;
 use App\Models\UserLead;
+use App\Models\FormField;
+use App\Models\LeadStage;
+use App\Models\FormBuilder;
+use App\Models\FormResponse;
 use Illuminate\Http\Request;
+use App\Models\FormFieldResponse;
 use Illuminate\Support\Facades\Auth;
 
 class FormBuilderController extends Controller
@@ -31,10 +32,26 @@ class FormBuilderController extends Controller
         }
     }
 
+    public function indexSurvey($id)
+    {
+        $usr = \Auth::user();
+        $project = Project::where('id', $id)->first();
+        $forms = FormBuilder::with('project')
+            ->where('project_id', $id)
+            ->get();
+        return view('form_builder.index_project_survey', compact('forms', 'project'));
+
+    }
+
 
     public function create()
     {
         return view('form_builder.create');
+    }
+
+    public function createSurvey(Project $project)
+    {
+        return view('form_builder.create-survey', compact('project'));
     }
 
     public function store(Request $request)
@@ -50,21 +67,53 @@ class FormBuilderController extends Controller
             if ($validator->fails()) {
                 $messages = $validator->getMessageBag();
 
-                return redirect()->route('form_builder.index')->with('error', $messages->first());
+                return redirect()->back()->with('error', $messages->first());
+            }
+
+            $form_builder = new FormBuilder();
+            $form_builder->name = $request->name;
+            $form_builder->project_id = $request->project_id;
+            $form_builder->code = uniqid() . time();
+            $form_builder->is_active = $request->is_active;
+            $form_builder->created_by = \Auth::user()->creatorId();
+            $form_builder->save();
+
+            return redirect()->back()->with('success', __('Survey successfully created.'));
+        } else {
+            return redirect()->back()->with('error', __('Permission denied.'));
+        }
+    }
+
+    public function storeSurvey(Request $request)
+    {
+        if (\Auth::user()->can('create form builder')) {
+            $validator = \Validator::make($request->all(), [
+                'name' => 'required|string|max:255',
+                'is_active' => 'required|boolean',
+                'project_id' => 'required|integer|exists:projects,id', // Ensure project_id exists in projects table
+            ]);
+
+            if ($validator->fails()) {
+                return redirect()->route('createSurvey', $request->project_id)
+                    ->withErrors($validator)
+                    ->withInput();
             }
 
             $form_builder = new FormBuilder();
             $form_builder->name = $request->name;
             $form_builder->code = uniqid() . time();
             $form_builder->is_active = $request->is_active;
+            $form_builder->project_id = $request->project_id;
             $form_builder->created_by = \Auth::user()->creatorId();
             $form_builder->save();
 
-            return redirect()->route('form_builder.index')->with('success', __('Form successfully created.'));
+            return redirect()->back()->with('success', __('Survey successfully created.'));
         } else {
             return redirect()->back()->with('error', __('Permission denied.'));
         }
     }
+
+
 
 
     public function show(FormBuilder $formBuilder)
@@ -92,6 +141,22 @@ class FormBuilderController extends Controller
             return response()->json(['error' => __('Permission Denied.')], 401);
         }
     }
+
+    public function editSurvey(FormBuilder $formBuilder)
+    {
+        if (\Auth::user()->can('edit form builder')) {
+            // if ($formBuilder->created_by == \Auth::user()->creatorId()) {
+            return view('form_builder.edit-survey', compact('formBuilder'));
+            // } else {
+            //     return response()->json(['error' => __('Permission Denied.')], 401);
+            // }
+        } else {
+            return response()->json(['error' => __('Permission Denied.')], 401);
+        }
+    }
+
+
+
 
 
     public function update(Request $request, FormBuilder $formBuilder)
@@ -144,6 +209,19 @@ class FormBuilderController extends Controller
         } else {
             return redirect()->back()->with('error', __('Permission denied.'));
         }
+    }
+
+    public function destroySurvey(FormBuilder $formBuilder)
+    {
+
+
+        FormField::where('form_id', '=', $formBuilder->id)->delete();
+        FormFieldResponse::where('form_id', '=', $formBuilder->id)->delete();
+        FormResponse::where('form_id', '=', $formBuilder->id)->delete();
+
+        $formBuilder->delete();
+
+        return redirect()->back()->with('success', __('Form successfully deleted!'));
     }
 
     // Field curd

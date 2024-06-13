@@ -2,24 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProjectStage;
+use Carbon\Carbon;
+use App\Models\Bug;
 use App\Models\Task;
-use App\Models\TaskComment;
-use App\Models\TaskFile;
-use App\Models\TaskStage;
-use App\Models\TimeTracker;
 use App\Models\User;
+use App\Models\BugFile;
 use App\Models\Project;
 use App\Models\Utility;
-use App\Models\Bug;
+use App\Models\TaskFile;
 use App\Models\BugStatus;
-use App\Models\BugFile;
-use App\Models\BugComment;
 use App\Models\Milestone;
-use Carbon\Carbon;
+use App\Models\TaskStage;
+use App\Models\BugComment;
 use App\Models\ActivityLog;
+use App\Models\FormBuilder;
 use App\Models\ProjectTask;
 use App\Models\ProjectUser;
+use App\Models\TaskComment;
+use App\Models\TimeTracker;
+use App\Models\FormResponse;
+use App\Models\ProjectStage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -323,8 +325,19 @@ class ProjectController extends Controller
 
                 // end chart
 
+                $surveys = FormBuilder::where('project_id', $project->id)
+                    ->orderBy('created_at', 'desc')->get();
 
-                return view('projects.view', compact('project', 'project_data'));
+                $survey_count = 0;
+
+                foreach ($surveys as $survey) {
+                    $responses = FormResponse::where('form_id', $survey->id)->get();
+                    $survey_count += $responses->count();
+                }
+
+
+
+                return view('projects.view', compact('project', 'project_data', 'surveys', 'survey_count'));
             } else {
                 return redirect()->back()->with('error', __('Permission Denied.'));
             }

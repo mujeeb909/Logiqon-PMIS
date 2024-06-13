@@ -221,13 +221,13 @@
                                 </div>
                                 <div class="ms-3">
                                     <small class="text-muted h6"><?php echo e(__('Total Survey')); ?></small>
-                                    <h6 class="m-0"><?php echo e($project_data['task']['total']); ?></h6>
+                                    
                                 </div>
                             </div>
                         </div>
                         <div class="col-auto text-end">
-                            <h4 class="m-0"><?php echo e($project_data['task']['done']); ?></h4>
-                            <small class="text-muted h6"><?php echo e(__('Done Task')); ?></small>
+                            <h4 class="m-0"><?php echo e($surveys->count()); ?></h4>
+                            
                         </div>
                     </div>
                 </div>
@@ -249,7 +249,7 @@
                             </div>
                         </div>
                         <div class="col-auto text-end">
-                            <h4 class="m-0"><?php echo e($project_data['task']['total']); ?></h4>
+                            <h4 class="m-0"><?php echo e($survey_count); ?></h4>
                         </div>
                     </div>
                 </div>
@@ -320,13 +320,19 @@
                 <div class="card-header">
                     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('create milestone')): ?>
                         <div class="d-flex align-items-center justify-content-between">
-                            <h5><?php echo e(__('Recent Survey')); ?> (<?php echo e(count($project->milestones)); ?>)</h5>
+                            <h5><?php echo e(__('Recent Survey')); ?> (<?php echo e($surveys->count()); ?>)</h5>
 
                             <div class="float-end">
-                                <a href="#" data-size="md" data-url="<?php echo e(route('project.milestone', $project->id)); ?>"
+
+                                <a href="<?php echo e(route('pro.survey.show', $project->id)); ?>" class="btn btn-sm btn-primary">
+                                    View All
+
+                                </a>
+                                <a href="#" data-size="md" data-url="<?php echo e(route('createSurvey', $project->id)); ?>"
                                     data-ajax-popup="true" data-bs-toggle="tooltip" title=""
-                                    class="btn btn-sm btn-primary" data-bs-original-title="<?php echo e(__('Create New Milestone')); ?>">
+                                    class="btn btn-sm btn-primary" data-bs-original-title="<?php echo e(__('Create New Survey')); ?>">
                                     <i class="ti ti-plus"></i>
+
                                 </a>
                             </div>
                         </div>
@@ -335,49 +341,33 @@
                 </div>
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
-                        <?php if($project->milestones->count() > 0): ?>
-                            <?php $__currentLoopData = $project->milestones; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $milestone): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php if($surveys->count() > 0): ?>
+                            <?php $__currentLoopData = $surveys; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $survey): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <li class="list-group-item px-0">
                                     <div class="row align-items-center justify-content-between">
                                         <div class="col-sm-auto mb-3 mb-sm-0">
                                             <div class="d-flex align-items-center">
                                                 <div class="div">
-                                                    <h6 class="m-0"><?php echo e($milestone->title); ?>
 
-                                                        <span
-                                                            class="badge-xs badge bg-<?php echo e(\App\Models\Project::$status_color[$milestone->status]); ?> p-2 px-3 rounded"><?php echo e(__(\App\Models\Project::$project_status[$milestone->status])); ?></span>
+                                                    <h6 class="m-0"><?php echo e($survey->name); ?>
+
+
                                                     </h6>
-                                                    <small
-                                                        class="text-muted"><?php echo e($milestone->tasks->count() . ' ' . __('Tasks')); ?></small>
 
+
+                                                    
                                                 </div>
-
                                             </div>
                                         </div>
                                         <div class="col-sm-auto text-sm-end d-flex align-items-center">
-                                            <div class="action-btn bg-warning ms-2">
-                                                <a href="#" data-size="md"
-                                                    data-url="<?php echo e(route('project.milestone.show', $milestone->id)); ?>"
-                                                    data-ajax-popup="true" data-bs-toggle="tooltip"
-                                                    title="<?php echo e(__('View')); ?>" class="btn btn-sm">
-                                                    <i class="ti ti-eye text-white"></i>
-                                                </a>
-                                            </div>
-                                            <div class="action-btn bg-info ms-2">
-                                                <a href="#" data-size="md"
-                                                    data-url="<?php echo e(route('project.milestone.edit', $milestone->id)); ?>"
-                                                    data-ajax-popup="true" data-bs-toggle="tooltip"
-                                                    title="<?php echo e(__('Edit')); ?>" class="btn btn-sm">
-                                                    <i class="ti ti-pencil text-white"></i>
-                                                </a>
-                                            </div>
-                                            <div class="action-btn bg-danger ms-2">
-                                                <?php echo Form::open(['method' => 'DELETE', 'route' => ['project.milestone.destroy', $milestone->id]]); ?>
 
-                                                <a href="#" class="mx-3 btn btn-sm  align-items-center bs-pass-para"
+                                            
+                                            <div class="action-btn bg-danger ms-2">
+                                                <?php echo Form::open(['method' => 'DELETE', 'route' => ['survey.delete', $survey->id]]); ?>
+
+                                                <a href="#" class="mx-3 btn btn-sm align-items-center bs-pass-para"
                                                     data-bs-toggle="tooltip" title="<?php echo e(__('Delete')); ?>"><i
                                                         class="ti ti-trash text-white"></i></a>
-
                                                 <?php echo Form::close(); ?>
 
                                             </div>
@@ -390,6 +380,9 @@
                                 <h6 class="h6 text-center"><?php echo e(__('No Survey Found.')); ?></h6>
                             </div>
                         <?php endif; ?>
+
+
+
                     </ul>
 
                 </div>
